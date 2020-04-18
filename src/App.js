@@ -1,26 +1,57 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, {Component} from 'react';
+import {connect} from "react-redux";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+    render() {
+        return (
+            <div className="App">
+                <div>
+                    你点击了{this.props.n}
+                </div>
+                <div>
+                    <button onClick={() => this.props.add1()}>+1</button>
+                    <button onClick={() => this.props.add2()}>+2</button>
+                    <button onClick={()=>this.props.minus()}>-1</button>
+                    <button onClick={() => this.props.add3(this.props.n)}>如果是单数就+1</button>
+                    {/*<button onClick={() => this.props.add4()}>两秒后+1</button>*/}
+                </div>
+            </div>
+        );
+    }
 }
 
-export default App;
+function x(state) {
+    return {
+        n: state.n
+    }
+}
+
+const y = {
+    add1: () => {
+        return {
+            type: 'add', payload: 1
+        }
+    },
+    add2: () => {
+        return {type: 'add', payload: 2}
+    },
+    minus: () => {
+        return {
+            type: 'minus', payload: 1
+    }
+    },
+    add3: (n) => {
+        console.log(n);
+        if (n% 2 === 1) {
+            return {type: 'add', payload: 1}
+        }else{
+            return {type: 'add', payload: 0}
+        }
+    },
+    add4: () => {
+        setTimeout(() => {
+            return {type: 'add', payload: 1}
+        }, 3000)
+    }
+};
+export default connect(x, y)(App);
